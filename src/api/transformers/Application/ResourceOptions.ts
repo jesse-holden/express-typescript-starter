@@ -5,6 +5,7 @@ export class ResourceOptions {
     page: number
     sortByDesc: any
     sortByAsc: any
+    relations: any
 
     parseLimit(): number {
         return Number(this.limit)
@@ -19,7 +20,7 @@ export class ResourceOptions {
             return []
         }
 
-        let list:any  = {};
+        let list: any = {}
 
         if (!isEmpty(this.sortByDesc)) {
             let sortByDesc = this.sortByDesc.split(',')
@@ -40,11 +41,20 @@ export class ResourceOptions {
         return list
     }
 
+    parseRelations(): object {
+        if (isEmpty(this.relations) && isEmpty(this.relations)) {
+            return []
+        }
+        
+        return this.relations.split(',')
+    }
+
     getAll(): object {
         return {
             take: this.parseLimit(),
             skip: (this.getPage() > 0 ? this.getPage() - 1 : 0) * this.parseLimit(),
-            order: this.parseSort()
+            order: this.parseSort(),
+            relations: this.parseRelations()
         }
     }
 }

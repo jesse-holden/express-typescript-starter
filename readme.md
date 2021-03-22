@@ -19,7 +19,9 @@ Start use now and just focus on your business and not spending hours in project 
 - **Easy Data Seeding** with our own factories.
 - **Auth System** thanks to [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken).
 - **Docker** thanks to [docker](https://github.com/docker).
-- **Class-based controllers to handle websocket events** thanks to [socket-controllers](https://github.com/typestack/socket-controllers).
+- **Class-based to handle websocket events** thanks to [socket-controllers](https://github.com/typestack/socket-controllers).
+- **Class-based to handle Cron Jobs** thanks to [cron-decorators](https://github.com/mrbandler/cron-decorators).
+- **API Documentation** thanks to [swagger](http://swagger.io/) and [routing-controllers-openapi](https://github.com/epiphone/routing-controllers-openapi).
 
 ### Installation
 
@@ -79,7 +81,7 @@ The route prefix is `/api` by default, but you can change this in the .env file.
 | **/**          | Home page |
 | **/api/login** | Login |
 | **/api/users** | Example entity endpoint |
-
+| **/docs**      | This is the Swagger UI with our API documentation |
 
 ### Database Migration
 
@@ -89,6 +91,10 @@ The route prefix is `/api` by default, but you can change this in the .env file.
 ### Running Seeders
 
 - You may execute the `npm run seed:run` command to seed your database.
+
+### Enable Cron Jobs
+
+To enable cron jobs you just need to update your env file by set `ENABLE_CRON_JOBS` to `true`.
 
 ### Pagination & Sort
 
@@ -109,8 +115,9 @@ Pagination and Sort are implemented on method `getAll` for `Users`, try to send 
 | **src/api/repositories/**         | Repository / DB layer |
 | **src/api/services/**             | Service layer |
 | **src/api/subscribers/**          | Event subscribers |
-| **src/api/validators/**           | Request classes with validation rules if the body is not equal with a model |
+| **src/api/requests/**             | Request classes with validation rules if the body is not equal with a model |
 | **src/api/transformers/**         | Class-transformer allows you to transform plain object to some instance of class and versa |
+| **src/api/cron-jobs/**            | Cron Jobs |
 | **src/database/factories**        | Factory the generate fake entities |
 | **src/database/migrations**       | Database migration scripts |
 | **src/database/seeds**            | Seeds to create some data in the database |

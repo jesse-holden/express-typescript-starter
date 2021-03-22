@@ -1,12 +1,12 @@
 import { Param, Get, JsonController, Post, Body, Put, Delete, HttpCode } from 'routing-controllers'
 import { Service } from 'typedi'
-import { LoginRequest } from '../../validators/Auth/LoginRequest'
+import { LoginRequest } from '../../requests/Auth/LoginRequest'
 import { LoginService } from '../..//services/Auth/LoginService'
 
 @Service()
 @JsonController('/login')
 export class LoginController {
-    constructor(
+    public constructor(
         private loginService: LoginService
         ) {
         //

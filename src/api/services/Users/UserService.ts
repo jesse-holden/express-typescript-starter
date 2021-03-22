@@ -3,7 +3,6 @@ import { UserRepository } from '../../repositories/Users/UserRepository'
 import { UserNotFoundException } from '../../exceptions/Users/UserNotFoundException'
 import { EventDispatcher, EventDispatcherInterface } from '../../../decorators/EventDispatcher'
 import { InjectRepository } from 'typeorm-typedi-extensions'
-import bcrypt from 'bcrypt'
 
 @Service()
 export class UserService {
@@ -17,14 +16,12 @@ export class UserService {
         return await this.userRepository.findAndCountRaw(resourceOptions)
     }
 
-    public async findOneById(id: number) {
-        return await this.getRequestedUserOrFail(id)
+    public async findOneById(id: number, resourceOptions?: object) {
+        return await this.getRequestedUserOrFail(id, resourceOptions)
     }
 
     public async create(data: any) {
-        data.password = await bcrypt.hash(data.password, 10)
-
-        let user = await this.userRepository.save(data);
+        let user = await this.userRepository.save(this.userRepository.create(data))
 
         this.eventDispatcher.dispatch('onUserCreate', user)
 
@@ -41,8 +38,8 @@ export class UserService {
         return await this.userRepository.delete(id)
     }
 
-    private async getRequestedUserOrFail(id: number) {
-        let user = await this.userRepository.findOneByIdRaw(id)
+    private async getRequestedUserOrFail(id: number, resourceOptions?: object) {
+        let user = await this.userRepository.findOneByIdRaw(id, resourceOptions)
 
         if (!user) {
             throw new UserNotFoundException
