@@ -1,25 +1,49 @@
-import { BaseEntity, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import bcrypt from 'bcrypt'
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { EntityBase } from '@base/infrastructure/abstracts/EntityBase';
+import { Exclude, Expose } from 'class-transformer';
+import { Role } from './Role';
+import { HashService } from '@base/infrastructure/services/hash/HashService';
 
 @Entity({ name: 'users' })
-export class User extends BaseEntity {
-    @PrimaryGeneratedColumn('increment')
-    id: number
+export class User extends EntityBase {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @Column()
-    first_name: string
+  @Column()
+  first_name: string;
 
-    @Column()
-    last_name: string
+  @Column()
+  last_name: string;
 
-    @Column()
-    email: string
+  @Column()
+  email: string;
 
-    @Column()
-    password: string
+  @Column()
+  @Exclude()
+  password: string;
 
-    @BeforeInsert()
-    async setPassword() {
-        this.password = await bcrypt.hash(this.password, 10)
-    }
+  @Column()
+  role_id: number;
+
+  @OneToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
+
+  @Expose({ name: 'full_name' })
+  get fullName() {
+    return this.first_name + ' ' + this.last_name;
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async setPassword() {
+    this.password = await (new HashService).make(this.password);
+  }
+
+  @BeforeInsert()
+  async setDefaultRole() {
+    const roleId = this.role_id ? this.role_id : 2;
+
+    this.role_id = roleId;
+  }
 }
