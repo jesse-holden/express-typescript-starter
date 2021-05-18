@@ -1,19 +1,22 @@
-import { Param, Get, JsonController, Post, Body, Put, Delete, HttpCode } from 'routing-controllers'
-import { Service } from 'typedi'
-import { LoginRequest } from '../../requests/Auth/LoginRequest'
-import { LoginService } from '../..//services/Auth/LoginService'
+import { JsonController, Body, Post } from 'routing-controllers';
+import { Service } from 'typedi';
+import { LoginRequest } from '@api/requests/Auth/LoginRequest';
+import { LoginService } from '@api/services/Auth/LoginService';
+import { ControllerBase } from '@base/infrastructure/abstracts/ControllerBase';
+import { OpenAPI } from 'routing-controllers-openapi';
 
 @Service()
+@OpenAPI({
+  tags: ['Auth'],
+})
 @JsonController('/login')
-export class LoginController {
-    public constructor(
-        private loginService: LoginService
-        ) {
-        //
-    }
+export class LoginController extends ControllerBase {
+  public constructor(private loginService: LoginService) {
+    super();
+  }
 
-    @Get()
-    public async login(@Body({ validate: true }) user: LoginRequest) {
-        return await this.loginService.login(user)
-    }
+  @Post()
+  public async login(@Body() user: LoginRequest) {
+    return await this.loginService.login(user);
+  }
 }

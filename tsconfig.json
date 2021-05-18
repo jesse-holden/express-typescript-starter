@@ -11,10 +11,16 @@
         "paths": {
             "*": [
                 "node_modules/*"
+            ],
+            "@base/*": [
+                "src/*"
+            ],
+            "@api/*": [
+                "src/api/*"
             ]
         },
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
+        "experimentalDecorators": true
     },
     "include": [
         "src/**/*"
